@@ -1,3 +1,5 @@
+// src/context/AuthContext.jsx
+
 import {
   createContext,
   useContext,
@@ -39,6 +41,10 @@ export const AuthProvider = ({
       localStorage.removeItem(
         "user"
       );
+
+      localStorage.removeItem(
+        "token"
+      );
     }
   }, []);
 
@@ -50,25 +56,29 @@ export const AuthProvider = ({
       JSON.stringify(userData)
     );
 
-    localStorage.setItem(
-      "token",
-      userData.token
-    );
+    if (userData?.token) {
+      localStorage.setItem(
+        "token",
+        userData.token
+      );
+    }
   };
 
-  // Merges partial updates into the current user and persists them.
-  // Swap the localStorage write for an API call (e.g. authApi.updateProfile)
-  // once a backend profile-update endpoint exists.
   const updateUser = (updates) => {
-    setUser((prev) => {
-      const next = { ...prev, ...updates };
+    setUser((prevUser) => {
+      const updatedUser = {
+        ...prevUser,
+        ...updates,
+      };
 
       localStorage.setItem(
         "user",
-        JSON.stringify(next)
+        JSON.stringify(
+          updatedUser
+        )
       );
 
-      return next;
+      return updatedUser;
     });
   };
 
@@ -91,6 +101,8 @@ export const AuthProvider = ({
         login,
         updateUser,
         logout,
+        isAuthenticated:
+          !!user,
       }}
     >
       {children}
@@ -98,5 +110,17 @@ export const AuthProvider = ({
   );
 };
 
-export const useAuth = () =>
-  useContext(AuthContext);
+export const useAuth = () => {
+  const context =
+    useContext(AuthContext);
+
+  if (!context) {
+    throw new Error(
+      "useAuth must be used within an AuthProvider"
+    );
+  }
+
+  return context;
+};
+
+export default AuthProvider;
