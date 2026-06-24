@@ -32,7 +32,8 @@ import Layout from "../components/layout/Layout";
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* PUBLIC */}
+
+      {/* PUBLIC ROUTES */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -42,7 +43,9 @@ const AppRoutes = () => {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout>
+              <Dashboard />
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -74,9 +77,7 @@ const AppRoutes = () => {
         path="/join/:inviteCode"
         element={
           <ProtectedRoute>
-            <Layout>
-              <JoinViaLink />
-            </Layout>
+            <JoinViaLink />
           </ProtectedRoute>
         }
       />
@@ -88,29 +89,6 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <Resources />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-
-      {/* QUEST ARENA */}
-      <Route
-        path="/groups/:groupId/quest-arena"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <QuestArena />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/leaderboard"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Leaderboard />
             </Layout>
           </ProtectedRoute>
         }
@@ -134,6 +112,29 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <Layout>
               <StudyRoom />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* QUEST ARENA */}
+      <Route
+        path="/groups/:groupId/quest-arena"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <QuestArena />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/leaderboard"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Leaderboard />
             </Layout>
           </ProtectedRoute>
         }
@@ -202,11 +203,12 @@ const AppRoutes = () => {
       <Route
         path="*"
         element={
-          <div className="min-h-screen flex items-center justify-center text-white bg-slate-950">
-            Page Not Found
+          <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white text-2xl font-bold">
+            404 | Page Not Found
           </div>
         }
       />
+
     </Routes>
   );
 };
